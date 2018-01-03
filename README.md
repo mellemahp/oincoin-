@@ -1,4 +1,4 @@
-# oincoin- blockchain pigs
+# oinCoin- blockchain pigs
 ## What is it? 
 The goal of this project is to create a blockchain themed around pigs
 
