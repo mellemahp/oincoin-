@@ -36,11 +36,12 @@ class Chain:
            data - data that will be stored in the genesis block
 
         """
+        self.chain_start = time.time()
         self.links = [self.genesis_block(data)]
         self._table = Texttable() # initializing table for __repr__
-        self._table.add_rows([['Index', 'Timestamp', 'Address'],
+        self._table.add_rows([['Index', 'Delta t (sec)', 'Address'],
                              [self.links[0].index,
-                              self.links[0].timestamp,
+                              self.links[0].timestamp - self.chain_start,
                               self.links[0].address]])
 
     def __len__(self):
@@ -103,7 +104,7 @@ class Chain:
         check_address(new_block.address)
         self.links.append(new_block)
         self._table.add_row([new_block.index,
-                            new_block.timestamp,
+                            new_block.timestamp - self.chain_start,
                             new_block.address])
 
 
