@@ -8,7 +8,9 @@ import string
 import random
 from texttable import Texttable
 
+
 DIFFICULTY = 5 #set the number of leading 0's in valid address
+PREFIX = "0" * DIFFICULTY #generates a string of the number of leading zeros
 
 class Chain:
     """ A structure that stores, creates, and validates blocks
@@ -34,11 +36,11 @@ class Chain:
            data - data that will be stored in the genesis block
 
         """
-        self.links = [Block(0,random_string(),data)]
+        self.links = [self.genesis_block(data)]
         self._table = Texttable() # initializing table for __repr__
         self._table.add_rows([['Index', 'Timestamp', 'Address'],
-                             [self.links[0]._index,
-                              self.links[0]._timestamp,
+                             [self.links[0].index,
+                              self.links[0].timestamp,
                               self.links[0].address]])
 
     def __len__(self):
@@ -65,6 +67,23 @@ class Chain:
 
         return self._table.draw()
 
+    def genesis_block(self, data):
+        """
+        Generates a random string of length size with 3 leading 0s (not, a real
+        address, only used to create)
+
+        Args:
+        data <T>: defines a block of data to be stored inside the genesis block
+        size
+        Returns:
+        Block <Block>: returns a block class
+
+        """
+        rand_str = PREFIX + ''.join(random.choice(string.ascii_uppercase +
+                                                 string.digits)
+                                   for _ in range(5 - len(PREFIX)))
+        return Block(0, rand_str, data)
+
     def new_link(self, data):
         """ Creates a new block and adds it to the blockchain
 
@@ -83,8 +102,8 @@ class Chain:
         new_block = Block(len(self), self.links[len(self) - 1].address, data)
         check_address(new_block.address)
         self.links.append(new_block)
-        self._table.add_row([new_block._index,
-                            new_block._timestamp,
+        self._table.add_row([new_block.index,
+                            new_block.timestamp,
                             new_block.address])
 
 
@@ -115,17 +134,11 @@ class Block:
             "INVALID ADDRESS": previous address does not have required # leading 0s
 
         """
-        self._index = index
-        self._timestamp = time.time()
-        if self._index ==  0:
-            self._previous = previous
-        else:
-            self._previous = check_address(previous)
-
-        self.data = data
+        self.index = index
+        self.timestamp = time.time()
+        self._previous = check_address(previous)
+        self._data = data
         self.nonce = 0
-        self.input_str = str(self._index) + str(self._timestamp) + \
-                         str(self._previous) + str(self.data)
         self.mine()
 
     def mine(self):
@@ -139,16 +152,14 @@ class Block:
             nonce <int>: a number incremented to alter the hash
 
         """
-        prefix = "0" * DIFFICULTY
-        self.address = hashify(self.input_str + str(self.nonce))
+        input_str = str(self.index) + str(self.timestamp) + \
+                    str(self._previous) + str(self._data)
 
-        while not self.address.startswith(prefix):
-            self.address = hashify(self.input_str + str(self.nonce))
+        self.address = hashify(input_str + str(self.nonce))
+
+        while not self.address.startswith(PREFIX):
+            self.address = hashify(input_str + str(self.nonce))
             self.nonce += 1
-
-        ## DEBUG ##
-        print("Address mined for Block #: {}").format(self._index)
-        ## END DEBUG ##
 
 
 def hashify(input_str):
@@ -169,22 +180,8 @@ def check_address(address):
     Raises:
         "INVALID ADDRESS": Address does not have required ## of leading 0's
     """
-    assert address.startswith("0" * DIFFICULTY),"INVALID ADDRESS"
+    assert address.startswith(PREFIX),"INVALID ADDRESS"
     return address
-
-def random_string(size=10):
-    """ Generates a random string of length size
-
-    Args:
-        size <int>: defines the length of the random string to generate
-
-    Returns:
-        rand_str <str>: random string of ascii characters
-
-    """
-    rand_str = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                       for _ in range(size))
-    return rand_str
 
 
 def main():
