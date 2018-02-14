@@ -6,20 +6,20 @@ The goal of this project is to create a blockchain project to learn more about h
 ## Use of code
 As of right now this is only a simple api for generating a blockchain. You can store a block of data in an oinCoin blockchain using the Chain object: 
 New chain:
-''' 
+```
 chain(<data>
-'''
+```
 Add new block to chain:
-'''
+```
 chain.new_link(<data>
-'''
+```
 If you want to take a look at your data simply call: 
-'''
+```
 print chain
-''' 
+```
 
 Example usage:
-'''
+```python
 >>> test = oincoin.Chain("stuff")
 >>> test.new_link("stuff2")
 >>> print(test)
@@ -34,7 +34,7 @@ Example usage:
 |       |               | cfe4c2067f323bc896a85d5da0789a4117037e0f61bf399bcf84 |
 |       |               | f6531ad94d424472f5c47ba0                             |
 +-------+---------------+------------------------------------------------------+
-'''
+```
 
 
 
