@@ -169,15 +169,15 @@ class Block(object):
 
 
 def hashify(input_str):
-    """ Hashes an input *string* using the SHA512 hash function
+    """ Hashes an input *string* using the SHA-512 hash function
     Args:
         input_str <str>: some string of arbitrary length to hash
 
     Returns:
-        <str>: hashed value of the input string from SHA512 hash function
+        <str>: hashed value of the input string from SHA-512 hash function
 
     """
-    return hashlib.sha512(input_str).hexdigest()
+    return hashlib.sha512(input_str.encode('utf-8')).hexdigest()
 
 def check_address(address):
     """ Checks that an address meets the required criteria
@@ -196,7 +196,7 @@ def main():
     test_chain = Chain("stuffffz")
     for data in ['stuff', 'things', 'stuffthings', 'thingstuff', 'stuffthings']:
         test_chain.new_link(data)
-    print test_chain
+    print(test_chain)
 
 if __name__ == "__main__":
     sys.exit(main())
