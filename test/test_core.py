@@ -27,6 +27,7 @@ class TestBlocks(unittest.TestCase):
         test_block = oincoin.Block.init(1,oincoin.PREFIX, "Test")
 
 class TestChain(unittest.TestCase):
+    DUMMY = 5
 
 if __name__ == '__main__':
     unittest.main()
