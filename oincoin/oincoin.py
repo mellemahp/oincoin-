@@ -186,8 +186,10 @@ def check_address(address):
     Raises:
         "INVALID ADDRESS": Address does not have required ## of leading 0's
     """
-    assert address.startswith(PREFIX), "INVALID ADDRESS"
-    return address
+    if not address.startswith(PREFIX):
+        raise Exception("INVALID ADDRESS")
+    else:
+        return address
 
 
 def main():

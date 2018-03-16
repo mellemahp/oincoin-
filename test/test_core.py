@@ -17,15 +17,16 @@ class TestFunctions(unittest.TestCase):
             self.assertEqual(oincoin.hashify(key), result)
 
     def test_check_address(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
+        self.assertEqual(oincoin.check_address(oincoin.PREFIX), oincoin.PREFIX)
+        print()
+        with self.assertRaises(Exception):
+            oincoin.check_address('111')
 
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
+class TestBlocks(unittest.TestCase):
+    def check_init(self):
+        test_block = oincoin.Block.init(1,oincoin.PREFIX, "Test")
+
+class TestChain(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
