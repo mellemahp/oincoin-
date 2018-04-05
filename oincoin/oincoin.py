@@ -6,7 +6,6 @@ proof of work nonce.
 '''
 import hashlib
 import time
-import string
 import random
 import sys
 from texttable import Texttable
@@ -24,7 +23,7 @@ class Chain(object):
     coerced into a string.
 
     Attributes:
-        links (list<Blocks<T>>): a list of Block objects that form the blockchain
+        links (list<Blocks<T>>): list of Block objects that form the blockchain
     """
 
     def __init__(self, data):
@@ -107,8 +106,7 @@ def genesis_block(data):
     Block <Block>: returns a block class
 
     """
-    rand_str = PREFIX + ''.join(random.choice(string.ascii_uppercase +
-                                              string.digits)
+    rand_str = PREFIX + ''.join(random.choice([chr(i) for i in range(32, 127)])
                                 for _ in range(5 - len(PREFIX)))
     return Block(0, rand_str, data)
 
@@ -117,10 +115,10 @@ class Block(object):
     """ Defines a single block of data with a valid address and metadata
 
     A single block of data to be added to a blockchain. Contains metadata about
-    when the block was generated and a hex  address with DIFFICULTY (global <int>)
+    when the block was generated and a hex address with DIFFICULTY (global <int>)
     leading 0's
 
-    Note: All blocks other than the genesis block (index = 0 ) must have a previous
+    Note: Blocks other than the genesis block (index = 0 ) must have a previous
         index that meets the required ### of leading 0s
     """
 
